@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frases Zen - Inspiración Diaria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="floating-elements">
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+  </div>
+
+  <div class="container">
+    <div class="breath-indicator"></div>
+    
+    <h1 class="title">Inspiración Zen</h1>
+    
+    <div class="quote-container">
+      <div class="quote-text" id="quote">
+        Respira profundo y permite que la sabiduría llegue a ti...
+      </div>
+      <div class="quote-author" id="author"></div>
+    </div>
+    
+    <button class="new-quote-btn" onclick="getNewQuote()">
+      Nueva Inspiración
+    </button>
+    
+    <div class="zen-symbol">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="45" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+        <path d="M50 5 Q75 50 50 95 Q25 50 50 5" fill="rgba(255,255,255,0.2)"/>
+      </svg>
+    </div>
+    
+    <div class="meditation-timer">
+      Momento presente • Respiración consciente
+    </div>
+  </div>
+
+  <script>
+    const quotes = [
+      {
+        text: "La paz viene de dentro. No la busques fuera.",
+        author: "Buddha"
+      },
+      {
+        text: "El presente es el único momento en el que realmente estamos vivos.",
+        author: "Thich Nhat Hanh"
+      },
+      {
+        text: "No puedes detener las olas, pero puedes aprender a surfear.",
+        author: "Jon Kabat-Zinn"
+      },
+      {
+        text: "La felicidad no es algo hecho. Viene de tus propias acciones.",
+        author: "Dalai Lama"
+      },
+      {
+        text: "Cada mañana renacemos. Lo que hacemos hoy es lo que más importa.",
+        author: "Buddha"
+      },
+      {
+        text: "El secreto de la salud para la mente y el cuerpo es vivir el momento presente sabiamente.",
+        author: "Buddha"
+      },
+      {
+        text: "La tranquilidad es la culminación de una mente disciplinada.",
+        author: "Buddha"
+      },
+      {
+        text: "Donde sea que estés, estate ahí completamente.",
+        author: "Eckhart Tolle"
+      }
+    ];
+
+    let currentQuoteIndex = -1;
+
+    function getNewQuote() {
+      // Asegurar que no se repita la misma frase
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * quotes.length);
+      } while (newIndex === currentQuoteIndex && quotes.length > 1);
+      
+      currentQuoteIndex = newIndex;
+      const quote = quotes[currentQuoteIndex];
+      
+      const quoteElement = document.getElementById('quote');
+      const authorElement = document.getElementById('author');
+      
+      // Animación de salida
+      quoteElement.classList.remove('show');
+      authorElement.classList.remove('show');
+      
+      setTimeout(() => {
+        quoteElement.textContent = quote.text;
+        authorElement.textContent = quote.author;
+        
+        // Animación de entrada
+        setTimeout(() => {
+          quoteElement.classList.add('show');
+          authorElement.classList.add('show');
+        }, 100);
+      }, 400);
+    }
+
+    // Mostrar primera frase al cargar
+    setTimeout(() => {
+      getNewQuote();
+    }, 1000);
+
+    // Auto-cambio cada 15 segundos (opcional)
+    setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        getNewQuote();
+      }
+    }, 15000);
+
+    // Agregar soporte para gestos táctiles
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', function(event) {
+      touchStartX = event.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', function(event) {
+      touchEndX = event.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        getNewQuote();
+      }
+    }
+  </script>
+</body>
+</html>
